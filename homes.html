@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+ <html lang="tr">
+   <head>
+     <meta charset="UTF-8">
+     <meta content="True" name="HandheldFriendly">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="robots" content="noindex, nofollow, noarchive">
+     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+     <title lang="tr">Güvenli Ödeme Sayfası - PayTR</title>
+     <link rel="icon" type="image/png" href="https://www.paytr.com/img/icons/favico.png?v04">
+     <link rel="stylesheet" href="https://www.paytr.com/css/normalize.min.css?188">
+     <link rel="stylesheet" href="https://www.paytr.com/css/style.css?188">
+     <link rel="stylesheet" href="https://www.paytr.com/css/font.css?188">
+     <link rel="stylesheet" href="https://www.paytr.com/css/bootstrap.min.css?188">
+     <link rel="stylesheet" href="https://www.paytr.com/css/font-awesome.min.css?188">
+     <link rel="stylesheet" href="https://www.paytr.com/css/tooltipster.min.css?188">
+     <script src="https://www.paytr.com/js/jquery-3.6.0.min.js?188"></script>
+     <script src="https://www.paytr.com/js/bootstrap-3.4.1.min.js?188"></script>
+     <script src="https://www.paytr.com/js/jquery.mask.min.1.14.16.js?188"></script>
+     <script src="https://www.paytr.com/js/jquery.tooltipster.min.js?188"></script>
+     <script src="https://www.paytr.com/js/bootstrap-dialog.min.js?188"></script>
+     <script src="https://www.paytr.com/js/jquery.numeric.js?188"></script>
+     <script src="https://www.paytr.com/js/iframeResizer.contentWindow.min.js?188"></script>
+     <script src="https://www.paytr.com/js/jquery.confirm.min.js?188"></script>
+     <script src="https://www.paytr.com/js/qrcode.min.js?188"></script>
+     <script src="https://www.paytr.com/js/paytr_lang/paytr_lang_code.js?188"></script>
+     <script src="https://www.paytr.com/js/paytr_lang/paytr_lang_odeme_sayfasi.js?188"></script>
+     <script src="https://www.paytr.com/js/bex/BexUtil.js?188"></script>
+     <style>
+       .img_error {
+         color: #474747;
+         font-size: 26px;
+         font-weight: 600;
+         position: absolute;
+         margin-top: 8px !important;
+       }
+
+       #ui-datepicker-div {
+         margin-top: -242px !important;
+       }
+
+       .fancybox-wrap {
+         top: 50px !important;
+       }
+
+       .fancybox-overlay-fixed {
+         overflow-y: hidden !important;
+       }
+
+       input.krt-kyt-class:empty {
+         /*visibility: hidden;*/
+         margin-left: -9999px;
+       }
+
+       input.krt-kyt-class:empty~label {
+         position: relative;
+         float: left;
+         line-height: 1.6em;
+         text-indent: 4em;
+         margin: 0.2em 0;
+         cursor: pointer;
+         -webkit-user-select: none;
+         -moz-user-select: none;
+         -ms-user-select: none;
+         user-select: none;
+       }
+
+       input.krt-kyt-class:empty~label:before,
+       input.krt-kyt-class:empty~label:after {
+         position: absolute;
+         display: block;
+         top: 0;
+         bottom: 0;
+         left: 0;
+         content: ' ';
+         width: 3.6em;
+         background-color: #c0c0c0;
+         border-radius: 1em;
+         -webkit-transition: all 100ms ease-in;
+         transition: all 100ms ease-in;
+       }
+
+       input.krt-kyt-class:empty~label:after {
+         width: 1.4em;
+         top: 0.1em;
+         bottom: 0.1em;
+         margin-left: 0.1em;
+         background-color: #fff;
+         border-radius: 1em;
+       }
+
+       input.krt-kyt-class:checked~label:before {
+         background-color: #393;
+       }
+
+       input.krt-kyt-class:checked~label:after {
+         margin-left: 2.1em;
+       }
+
+       .tooltipster-base {}
+
+       .modal {
+         top: 5px !important;
+       }
+
+       .modal-footer {
+         padding: 6px !important;
+       }
+
+       input {
+         touch-action: pan-y;
+       }
+     </style>
+   </head>
+   <body style="overflow-x: visible;">
+   <div id="timeout_limit_engelle" class="d_none">
+     <p>
+       <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+       <span lang="tr">Bu işlem için ayrılan süre dolmuştur. Lütfen işleme tekrar başlayın.</span>
+     </p>
+   </div>
+   <div class="container">
+     <div class="row">
+       <div class="col-md-12">
+         <div style="padding: 8px 2px 8px 8px;text-align: right;font-size: 12px;">
+           <a href="#" id="lang_tr" style="text-decoration: none;" class="bold_text">TR</a> / <a href="#" id="lang_en" style="text-decoration: none;">EN</a>
+         </div>
+       </div>
+     </div>
+   </div>
+   <button type="button" data-toggle="modal" data-keyboard="false" data-backdrop="static" data-target="#req_cvv_btn" id="req_cvv_btn_click" style="display: none;">CVV Modal</button>
+   <div id="req_cvv_btn" class="modal fade" role="dialog" style="top: 0 !important;">
+     <div class="modal-dialog">
+       <div class="modal-content">
+         <div class="modal-header">
+           <button type="button" class="close" data-dismiss="modal" id="req_cvv_close">×</button>
+           <h4 class="modal-title" lang="tr">CVV Gerekiyor</h4>
+         </div>
+         <div class="modal-body">
+           <p>
+             <span lang="tr">Kartınızın bankası bu kart ile ödeme yapılabilmesi CVV bilgisini zorunlu tutmaktadır</span>
+             <a href="#" style="color: #474747" class="cvv-modal-box" tabindex="99">
+               <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+             </a>
+           </p>
+           <input type="text" autocomplete="off" id="req_cvv_input" name="req_cvv" maxlength="3" class="number req_cvv_input" lang="tr" placeholder="CVV Girin">
+           <input type="button" id="req_cvv_send_btn" class="req_cvv_button" lang="tr" value="Onayla">
+         </div>
+       </div>
+     </div>
+   </div>
+   <div id="ekran_engelleme" style="display: none;"></div>
+   <div id="mpass-loader">
+     <div class="spinner"></div>
+   </div>
+   <div style="display: none;position: fixed;z-index: 9999;min-width: 100%;text-align: center;" id="tosla-payment-modal">
+     <div id="tosla-bg">
+       <div class="tosla-bg-header">
+         <span id="tosla-win-close" class="ts-success-cls">×</span>
+         <img class="img-responsive" src="https://www.paytr.com/img/odeme_sayfasi/tosla_wht.svg" alt="TOSLA" style="height: 60px;padding: 10px;">
+       </div>
+       <p style="padding: 15px;font-size: 16px;font-weight: 600;" lang="tr">Ödeme işleminize TOSLA mobil uygulamasını kullanarak devam edebilirsiniz.</p>
+       <div id="ts-qrcode-load" class="ts-success-cls">
+         <i class="fa fa-circle-o-notch fa-spin fa-fw" style="font-size: 50px;"></i>
+       </div>
+       <div id="ts-success" style="display: none;">
+         <div class="success-animation">
+           <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+             <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"></circle>
+             <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"></path>
+           </svg>
+         </div>
+         <p style="font-size: 16px; font-weight: 600;" lang="tr">İŞLEMİNİZ ONAYLANDI</p>
+       </div>
+       <div id="ts-qrcode" class="ts-success-cls" style="display: none;"></div>
+       <p style="font-size: 16px; font-weight: 600; display: none;" lang="tr" id="ts-pending-text">UYGULAMADAN DEVAM EDİN</p>
+       <div class="ts-qr-timeout ts-success-cls">
+         <span lang="tr">Kalan Süre</span>: <span id="ts-qr-timeout">290</span>
+         <span lang="tr">sn</span>
+       </div>
+     </div>
+   </div>
+   <div class="os_govde">
+     <form id="os_form" autocomplete="off" " method=" post">
+       <div class="container">
+         <div class="odeme-yontemi">
+           <div class="row">
+             <div class="col-lg-12">
+               <div class="custom_os_icerik os_icerik" style="border-top: 1px solid #dcdcdc;margin-bottom:0;">
+                 <div class="row">
+                   <div class="col-lg-12">
+                     <div class="row">
+                       <div class="col-md-4">
+                         <label class="custom_os_odeme_secenek_btn os_odeme_secenek_btn os_odeme_secenek_checked" for="os_tek_cekim">
+                           <input id="os_tek_cekim" name="installment_count" value="0" type="radio">
+                           <span class="odms_bt_spn">
+                             <span lang="tr" class="ods_scm_bsl">Tek Çekim</span>
+                             <br>
+                             <span class="odm_spn_alt">
+                               <span lang="tr">Yurt içi ve yurt dışı</span>
+                               <br>
+                               <span lang="tr">tüm banka ve kredi kartları</span>
+                             </span>
+                           </span>
+                         </label>
+                       </div>
+                       <div class="col-md-4">
+                         <label class="custom_os_odeme_secenek_btn os_odeme_secenek_btn" for="os_diger">
+                           <input id="os_diger" name="installment_count" value="0" type="radio">
+                           <span class="odms_bt_spn">
+                             <span lang="tr" class="ods_scm_bsl">Diğer Ödeme Yöntemleri</span>
+                             <br>
+                             <span class="odm_spn_alt">
+                               <span lang="tr">Mobil Cüzdan</span> / <span lang="tr">Kart Puanları</span> / <span lang="tr">Ön Ödemeli Kart</span>
+                               <br> BKM Express / Tosla / Juzdan </span>
+                           </span>
+                         </label>
+                       </div>
+                       <div class="clearfix"></div>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="row">
+                   <div id="os_ktt_sec" class="col-lg-12 os_oy_icerik os_gzln_ksm" style="display: none;">
+                      
+                   </div>
+                 </div>
+                 <div class="row" id="bootstrap_width_alma">
+                   
+                   </div>
+                   <div class="row">
+                      
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-lg-12"></div>
+           </div>
+           <div id="os_kart_bilgileri" class="card_info" style="">
+             <div class="row">
+               <div class="col-lg-12">
+                 <div class="custom_os_icerik os_icerik">
+                   <div class="row">
+                     <div class="col-md-10 col-sm-12 col-md-offset-1">
+                       <div class="row o_cc_inin_gz">
+                         <div class="col-sm-12 col-md-5">
+                           <span lang="tr" id="kart_ad_soyad_kontrol" class="card_inputs_text_dom">Kart Üzerindeki Ad, Soyad</span>: <input type="text" id="os_cc_name" name="cc_owner" onblur="clearName()" maxlength="75">
+                         </div>
+                       </div>
+                       <div class="row card_inputs_dom">
+                         <div class="col-sm-5">
+                           <span class="card_inputs_text_dom" lang="tr">Kart Numarası</span>: <input class="os_cc_number_inputs" type="text" id="os_cc_number_mask" maxlength="22">
+                           <input id="os_cc_number" name="card_number" class="os_cc_number_inputs number spaces-delete" maxlength="19" style="display: none;">
+                         </div>
+                         <div class="col-sm-4 card_inputs_dom_name">
+                           <span lang="tr" class="card_inputs_text_dom">Kart Son Kullanma Tarihi</span>: <div class="row" style="position: relative;">
+                             <div style="position: absolute;left: 50%;margin-left: -4px;font-size: 22px;margin-top: 4px;"> / </div>
+                             <div class="col-lg-6 col-xs-6">
+                               <div>
+                                 <input type="text" name="expiry_month" id="expiry_month" class="number" maxlength="2" placeholder="Ay" lang="tr">
+                               </div>
+                             </div>
+                             <div class="col-lg-6 col-xs-6">
+                               <div>
+                                 <input type="text" name="expiry_year" id="expiry_year" class="number" maxlength="2" placeholder="Yıl" lang="tr">
+                               </div>
+                             </div>
+                           </div>
+                         </div>
+                         <div class="col-sm-3">
+                           <span lang="tr" class="card_inputs_text_dom">CVV Güvenlik Kodu</span>: <input type="text" id="os_cc_cvv" name="cvv" class="cvv number spaces-delete" maxlength="3" style="width: 100%;padding-left: 35px;">
+                           <div class="eft-banka-islem-numarasi" style="left: 26px;margin-top: -30px;">
+                             <a href="#" class="cvv-modal-box" id="cvv-modal-box-id" tabindex="99">
+                               <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                             </a>
+                           </div>
+                         </div>
+                       </div>
+                       <div class="row card_inputs_dom" id="cc_banka_bilgisi_alani" style="display: none;">
+                         <div class="col-sm-12 col-md-5">
+                           <span lang="tr" class="card_inputs_text_dom">Kart Seçimi</span>: <select id="cc_banka_bilgisi" name="card_type_pts" class="card_info_arrow">
+                             <option value="" lang="tr">Lütfen Seçin</option>
+                             <option value="advantage">ADVANTAGE</option>
+                             <option value="axess">AXESS / WINGS</option>
+                             <option value="bonus">BONUS</option>
+                             <option value="cardfinans">CARDFİNANS</option>
+                             <option value="maximum">MAXIMUM / MAXIMILES</option>
+                           </select>
+                         </div>
+                       </div>
+                       <div class="row card_inputs_dom" id="non3d_store_hidden">
+                         <hr style="margin: 8px 15px 15px 15px;">
+                         <div class="col-sm-6" style="position: relative;" id="store_card_red">
+                           <i aria-hidden="true" class="fa fa-question-circle-o" id="store_card_info" style="display: inline;"></i>
+                           <label for="store_card" id="store_card_label" class="custom_os_icerik">
+                             <input type="checkbox" name="store_card" id="store_card" value="1">
+                             <span lang="tr" class="noselect">Kolay ödeme için kartımı hatırla</span>
+                           </label>
+                         </div>
+                       </div>
+                       <div class="row" id="qry_res_div" style="display: none;">
+                         <div class="col-xs-12" style="padding: 4px 16px 11px 16px;">
+                           <hr style="margin-top: -5px;">
+                           <span lang="tr">Puan İşlem Durumu</span>: <span id="qry_res"></span>
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-12">
+                           <input type="button" class="custom_odeme_yap_btn os_odeme_yap_btn kart_puan_sorgula" id="kart_puan_sorgula" lang="tr" value="Puan Sorgula" style="display: none;padding-left: 0;">
+                           <div id="qry_loader" class="os_gnl_odeme_btn_pasif kart_puan_sorgula" style="display: none;margin: 5px 0 0 0;width: 100%;">
+                             <i class="fa fa-spinner fa-spin"></i>
+                             <span lang="tr">Puan Sorgulanıyor</span>
+                           </div>
+                           <input type="button" class="custom_odeme_yap_btn os_odeme_yap_btn kart_puan_sorgula" id="kart_odeme_yap_btn" lang="tr" value="Ödeme Yap" style="padding-left: 0;">
+                           <div id="odeme_btn_loader" class="os_gnl_odeme_btn_pasif" style="display: none;margin: 5px 0 0 0;width: 100%;">
+                             <i class="fa fa-spinner fa-spin"></i>
+                             <span lang="tr">Lütfen Bekleyin</span>
+                           </div>
+                         </div>
+                       </div>
+                       <div class="row">
+                         <div class="col-md-12">
+                           <div class="os_kartlar_x2 o_cc_inin_goster">
+                             <img class="img-responsive tr_en_img_x" src="https://www.paytr.com/img/odeme_sayfasi/os_kartlar_x2.svg?v3" alt="Kart Güvenliği" style="padding: 40px 0 10px 0;">
+                             <img class="img-responsive tr_en_img_y" src="https://www.paytr.com/img/odeme_sayfasi/EN_os_kartlar_x2.svg?v3" alt="Card Security" style="display: none; padding: 40px 0 10px 0;">
+                           </div>
+                           <div class="o_cc_inin_goster">
+                             <div class="os_kartlar_x3" style="display: none;">
+                               <img class="img-responsive tr_en_img_x" src="https://www.paytr.com/img/odeme_sayfasi/os_kartlar_x3.svg?v3" alt="Kart Güvenliği" style="padding: 40px 0 10px 0;">
+                               <img class="img-responsive tr_en_img_y" src="https://www.paytr.com/img/odeme_sayfasi/EN_os_kartlar_x3.svg?v3" alt="Card Security" style="display: none;padding: 40px 0 10px 0;">
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+     </form>
+   </div>
+ </body>
+ </html>
